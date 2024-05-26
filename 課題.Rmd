@@ -1,0 +1,117 @@
+---
+title: "Untitled"
+author: "aaa"
+date: "2024-05-21"
+output: html_document
+---
+
+```{r}
+# dplyr処理演習  演習課題 
+#データ読み込み
+
+library(tidyverse)
+
+d <- data.frame(
+  name = c("太郎", "花子", "三郎", "良子", "次郎", "桜子", "四郎", "松子", "愛子"),
+  school = c("南", "南", "南", "南", "南", "東", "東", "東", "東"),
+  teacher = c("竹田", "竹田", "竹田", "竹田",  "佐藤", "佐藤", "佐藤", "鈴木", "鈴木"),
+  gender = c("男", "女", "男", "女", "男", "女", "男", "女", "女"),
+  math = c(4, 3, 2, 4, 3, 4, 5, 4, 5),
+  reading = c(1, 5, 2, 4, 5, 4, 1, 5, 4) )
+
+library(DT)
+datatable(d)
+```
+
+```{r}
+#1 問題 学生（name）と数学（math）のデータを取得せよ。
+
+
+d |> select(name, math)
+```
+
+```{r}
+#2 性別（gender）以外のデータを取得せよ。
+d |> select(-gender)
+
+```
+
+```{r}
+#3 3～6番目のレコードを取得せよ。
+
+d |> slice(3:6)
+
+```
+
+```{r}
+#4 名前がアルファベット順になるようにレコードをソートせよ。
+
+d |> arrange(name)
+
+```
+
+```{r}
+#5 数学の点数を高い方から低い順（降順: descending order）になるようにソートせよ。
+
+d |> arrange (desc(math))
+
+```
+
+
+
+```{r}
+#6 数学、国語の点数を高い方から低い順（降順: descending order）になるようにソートせよ。 なお、数学の順位を最優先とする。
+
+d |> arrange ((desc(math)), desc(reading)) 
+
+```
+
+```{r}
+#7　名前（name）と国語（reading）の列のみを抽出せよ。．
+
+d |> select(name, reading)
+
+```
+
+```{r}
+#8 数学（math）の平均値を計算せよ.
+
+d |> summarize (mean (math))
+
+```
+
+```{r}
+#9 先生（teacher）ごとに数学（math）の平均値を計算せよ。
+
+d |> group_by (teacher) |> summarize (mean (math))
+
+```
+
+```{r}
+#10 女子の数学（math）と国語（reading）の点数を取得せよ。
+
+d |> filter(gender == "女") |> select (name, gender, math, reading)  
+
+```
+
+```{r}
+#11 南高校の男子の国語（reading）の点数を取得せよ。
+d |> filter(school == "南") |> select (name, school, teacher ,  gender, math, reading)
+
+```
+
+```{r}
+#12 学生数が3名以上の先生（teacher）のデータを取得せよ。
+d |> group_by (teacher) |> filter(n() >= 3)
+```
+
+```{r}
+#13 数学（math）と国語（reading）の合計点（total）を作成せよ。
+d |> mutate (total = math+ reading)
+
+```
+
+```{r}
+#14 数学（math）を100点満点に換算（新カラム名：math100）せよ。
+d |> mutate (math100 = math * 20)
+```
